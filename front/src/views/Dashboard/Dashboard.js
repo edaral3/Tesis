@@ -42,8 +42,8 @@ const styles3 = {
 };
 
 import priceImage1 from "assets/img/plantas/img1.png";
-import priceImage2 from "assets/img/plantas/img2.jpg";
-import priceImage3 from "assets/img/plantas/img3.jpg";
+import priceImage2 from "assets/img/plantas/img2.png";
+import priceImage3 from "assets/img/plantas/img3.png";
 
 const useStyles = makeStyles({ ...styles1, ...styles2, ...styles3 });
 
@@ -168,14 +168,14 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart className={classes.cardHover}>
-            <CardHeader className={classes.cardHeaderHover}>
+            <CardHeader />
+            <CardBody className={classes.cardHeaderHover}>
               <ChartistGraph
                 data={pieChart.data}
                 type="Pie"
                 options={pieChart.options}
               />
-            </CardHeader>
-            <CardBody />
+            </CardBody>
             <CardFooter stats className={classes.cardFooter}>
               <h6 className={classes.legendTitle}>Probabilidad</h6>
               <i className={"fas fa-circle " + classes.info} /> Sana {` `}
