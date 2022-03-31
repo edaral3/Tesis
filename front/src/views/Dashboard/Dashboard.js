@@ -6,10 +6,11 @@ import ChartistGraph from "react-chartist";
 import { makeStyles } from "@material-ui/core/styles";
 
 // @material-ui/icons
-import AccessTime from "@material-ui/icons/AccessTime";
-import Edit from "@material-ui/icons/Edit";
-import Place from "@material-ui/icons/Place";
-import Schedule from "@material-ui/icons/Schedule";
+//import AccessTime from "@material-ui/icons/AccessTime";
+import WarningIcon from "@material-ui/icons/Warning";
+//import MedicalServicesIcon from "@material-ui/icons/MedicalServices";
+import HealingIcon from "@material-ui/icons/Healing";
+import BugReportIcon from "@material-ui/icons/BugReport";
 
 // core components
 import ImageUpload from "components/CustomUpload/ImageUpload.js";
@@ -39,6 +40,14 @@ const styles3 = {
     margin: "0",
     color: "#999999",
   },
+  cardsLarge1: {
+    display: "block",
+    height: "90%",
+  },
+  cardsLarge2: {
+    display: "block",
+    height: "95%",
+  },
 };
 
 import priceImage1 from "assets/img/plantas/img1.png";
@@ -46,8 +55,69 @@ import priceImage2 from "assets/img/plantas/img2.png";
 import priceImage3 from "assets/img/plantas/img3.png";
 
 const useStyles = makeStyles({ ...styles1, ...styles2, ...styles3 });
+console.log(pieChart.data);
+const info = {
+  warning: {
+    detonating:
+      "La roya comun es causada por el hongo Puccinia polysora," +
+      " La prncipal fuente de infeccion son las esporas que son dispersadas" +
+      " por el viento de otros cultivos.",
+    tretament:
+      "Lo recomendable es aplicar medidas preventivas para" +
+      " evitar el contagio. No es posible sanar las partes infectadas por" +
+      " lo que se recomienda la aplicacion de fungicidas para evitar la" +
+      " propagacion a las partes sanas.",
+  },
+  danger: {
+    detonating:
+      "El moteado clorotico es causado por el virus MCMV que se" +
+      " transmite mediante varios tipos de insectos los cuales se alimentan" +
+      " de plantas infectadas con el virus y posteriormente se alimentan de" +
+      " las plantas sanas causandoles la infeccion.",
+    tretament:
+      "Lo recomendable es aplicar medidas preventivas para" +
+      " evitar el contagio. debido a que son insectos los que proagan la" +
+      " enfermedad es recmendable aplicar insecticidas.",
+  },
+  info: {
+    detonating: "",
+    tretament: "",
+  },
+};
 
 export default function Dashboard() {
+  const first = {
+    labels: ["33.3%", "33.3%", "33.3%"],
+    series: [33.3, 33.3, 33.3],
+  };
+  const [color, setColor] = React.useState("info");
+  const [dataPie, setDataPie] = React.useState(first);
+  const changueColor = () => {
+    if (color === "danger") {
+      setColor("info");
+    } else if (color === "info") {
+      setColor("warning");
+    } else {
+      setColor("danger");
+    }
+    setDataPie(first);
+  };
+
+  const getName = () => {
+    let name = "";
+    switch (color) {
+      case "warning":
+        name = "Roya Comun";
+        break;
+      case "danger":
+        name = "Moteado Clorotico";
+        break;
+      default:
+        name = "Planta Sana";
+    }
+    return name;
+  };
+
   const classes = useStyles();
   return (
     <div>
@@ -56,7 +126,7 @@ export default function Dashboard() {
         <GridItem xs={8}>
           <div className={classes.typo}>
             <Muted>
-              <h3>
+              <h3 style={{ textAlign: "center" }}>
                 Desarrollo de aplicación para la detección de enfermedades en
                 cultivos de milpa utilizando redes neuronales convolucionales
               </h3>
@@ -67,59 +137,37 @@ export default function Dashboard() {
       </GridContainer>
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
-          <Card>
+          <Card className={classes.cardsLarge1}>
             <CardHeader>
-              <h4 className={classes.cardTitle}> Navigation Pills Icons </h4>
+              <br />
+              <h4 className={classes.cardTitle}> {getName(color)} </h4>
             </CardHeader>
             <CardBody>
+              <br />
               <NavPills
-                color="rose"
+                color={color}
                 horizontal={{
                   tabsGrid: { xs: 12, sm: 12, md: 4 },
                   contentGrid: { xs: 12, sm: 12, md: 8 },
                 }}
                 tabs={[
                   {
-                    tabButton: "Schedule",
-                    tabIcon: Schedule,
+                    tabButton: "Detonante",
+                    tabIcon: BugReportIcon,
                     tabContent: (
                       <span>
-                        <p>
-                          Efficiently unleash cross-media information without
-                          cross-media value. Quickly maximize timely
-                          deliverables for real-time schemas.
-                        </p>
+                        <p> {info[color].detonating} </p>
                         <br />
-                        <p>
-                          Dramatically maintain clicks-and-mortar solutions
-                          without functional solutions. Dramatically visualize
-                          customer directed convergence without revolutionary
-                          ROI. Collaboratively administrate empowered markets
-                          via plug-and-play networks. Dynamically procrastinate
-                          B2C users after installed base benefits.
-                        </p>
                       </span>
                     ),
                   },
                   {
-                    tabButton: "Edit",
-                    tabIcon: Edit,
+                    tabButton: "Tratamiento",
+                    tabIcon: HealingIcon,
                     tabContent: (
                       <span>
-                        <p>
-                          Efficiently unleash cross-media information without
-                          cross-media value. Quickly maximize timely
-                          deliverables for real-time schemas.
-                        </p>
+                        <p> {info[color].tretament} </p>
                         <br />
-                        <p>
-                          Dramatically maintain clicks-and-mortar solutions
-                          without functional solutions. Dramatically visualize
-                          customer directed convergence without revolutionary
-                          ROI. Collaboratively administrate empowered markets
-                          via plug-and-play networks. Dynamically procrastinate
-                          B2C users after installed base benefits.
-                        </p>
                       </span>
                     ),
                   },
@@ -129,22 +177,20 @@ export default function Dashboard() {
           </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
-          <Card chart className={classes.cardHover}>
+          <Card className={classes.cardsLarge1}>
             <CardHeader>
               <GridContainer justify="center">
                 <GridItem>
+                  <br />
                   <ImageUpload
                     addButtonProps={{
-                      color: "rose",
-                      round: true,
+                      color: "primary",
                     }}
                     changeButtonProps={{
-                      color: "rose",
-                      round: true,
+                      color: "primary",
                     }}
                     removeButtonProps={{
-                      color: "danger",
-                      round: true,
+                      color: "rose",
                     }}
                   />
                 </GridItem>
@@ -153,7 +199,7 @@ export default function Dashboard() {
             <CardBody>
               <GridContainer justify="center">
                 <GridItem xs={12} sm={12} md={12}>
-                  <Button fullWidth color="success">
+                  <Button fullWidth color="success" onClick={changueColor}>
                     Analizar imagen
                   </Button>
                 </GridItem>
@@ -161,17 +207,18 @@ export default function Dashboard() {
             </CardBody>
             <CardFooter chart>
               <div className={classes.stats}>
-                <AccessTime /> Unicamente se aceptan formatos jpg y png
+                <WarningIcon /> Unicamente se aceptan imagenes en formato jpg y
+                png
               </div>
             </CardFooter>
           </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
-          <Card chart className={classes.cardHover}>
+          <Card className={classes.cardsLarge1}>
             <CardHeader />
             <CardBody className={classes.cardHeaderHover}>
               <ChartistGraph
-                data={pieChart.data}
+                data={dataPie}
                 type="Pie"
                 options={pieChart.options}
               />
@@ -192,7 +239,7 @@ export default function Dashboard() {
       <br />
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
-          <Card product className={classes.cardHover}>
+          <Card className={`${classes.cardHover} ${classes.cardsLarge2}`}>
             <CardHeader image className={classes.cardHeaderHover}>
               <a href="#pablo" onClick={(e) => e.preventDefault()}>
                 <img src={priceImage1} alt="..." />
@@ -206,23 +253,15 @@ export default function Dashboard() {
                 </a>
               </h4>
               <p className={classes.cardProductDesciprion}>
-                The place is close to Barceloneta Beach and bus stop just 2 min
-                by walk and near to {'"'}Naviglio{'"'} where you can enjoy the
-                main night life in Barcelona.
+                La roya comun aparece como pequeñas postulas rojizo-anaranjadas
+                con formas de cabeza de alfiler mayormente en el lado superior
+                de las hojas.
               </p>
             </CardBody>
-            <CardFooter product>
-              <div className={classes.price}>
-                <h4>$899/night</h4>
-              </div>
-              <div className={`${classes.stats} ${classes.productStats}`}>
-                <Place /> Barcelona, Spain
-              </div>
-            </CardFooter>
           </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
-          <Card product className={classes.cardHover}>
+          <Card className={`${classes.cardHover} ${classes.cardsLarge2}`}>
             <CardHeader image className={classes.cardHeaderHover}>
               <a href="#pablo" onClick={(e) => e.preventDefault()}>
                 <img src={priceImage2} alt="..." />
@@ -236,23 +275,14 @@ export default function Dashboard() {
                 </a>
               </h4>
               <p className={classes.cardProductDesciprion}>
-                The place is close to Metro Station and bus stop just 2 min by
-                walk and near to {'"'}Naviglio{'"'} where you can enjoy the
-                night life in London, UK.
+                Las hojas de las plantas del maiz sanas son grandes, largas de
+                un y de un color verde, sin manchas ni protuberancias.
               </p>
             </CardBody>
-            <CardFooter product>
-              <div className={classes.price}>
-                <h4>$1.119/night</h4>
-              </div>
-              <div className={`${classes.stats} ${classes.productStats}`}>
-                <Place /> London, UK
-              </div>
-            </CardFooter>
           </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
-          <Card product className={classes.cardHover}>
+          <Card className={`${classes.cardHover} ${classes.cardsLarge2}`}>
             <CardHeader image className={classes.cardHeaderHover}>
               <a href="#pablo" onClick={(e) => e.preventDefault()}>
                 <img src={priceImage3} alt="..." />
@@ -266,19 +296,11 @@ export default function Dashboard() {
                 </a>
               </h4>
               <p className={classes.cardProductDesciprion}>
-                The place is close to Metro Station and bus stop just 2 min by
-                walk and near to {'"'}Naviglio{'"'} where you can enjoy the main
-                night life in Milan.
+                El moteado clorotico se caracteriza por la presencia de
+                numerosas motas diminutas y venas de color amarillo que corren
+                paralelamente a las venas de las hojas.
               </p>
             </CardBody>
-            <CardFooter product>
-              <div className={classes.price}>
-                <h4>$459/night</h4>
-              </div>
-              <div className={`${classes.stats} ${classes.productStats}`}>
-                <Place /> Milan, Italy
-              </div>
-            </CardFooter>
           </Card>
         </GridItem>
       </GridContainer>
