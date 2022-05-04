@@ -58,7 +58,6 @@ import priceImage2 from "assets/img/plantas/img2.png";
 import priceImage3 from "assets/img/plantas/img3.png";
 
 const useStyles = makeStyles({ ...styles1, ...styles2, ...styles3 });
-console.log(pieChart.data);
 const info = {
   warning: {
     detonating:
@@ -90,7 +89,7 @@ const info = {
 
 export default function Dashboard() {
   const first = {
-    labels: ["33.3%", "33.3%", "33.3%"],
+    labels: [" ", " ", " "],
     series: [33.3, 33.3, 33.3],
   };
   const [color, setColor] = React.useState("info");
@@ -134,11 +133,7 @@ export default function Dashboard() {
         changueColor(list);
         const sum = list[0] + list[1] + list[2];
         const newData = {
-          labels: [
-            ((100 * list[2]) / sum).toFixed(2) + "%",
-            ((100 * list[0]) / sum).toFixed(2) + "%",
-            ((100 * list[1]) / sum).toFixed(2) + "%",
-          ],
+          labels: [" ", " ", " "],
           series: [
             ((100 * list[2]) / sum).toFixed(2),
             ((100 * list[0]) / sum).toFixed(2),
@@ -149,7 +144,13 @@ export default function Dashboard() {
       }
     };
   };
-
+  /*
+  labels: [
+            ((100 * list[2]) / sum).toFixed(2) + "%",
+            ((100 * list[0]) / sum).toFixed(2) + "%",
+            ((100 * list[1]) / sum).toFixed(2) + "%",
+          ],
+  */
   const getName = () => {
     let name = "";
     switch (color) {

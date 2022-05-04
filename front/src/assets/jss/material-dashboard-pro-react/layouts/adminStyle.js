@@ -1,5 +1,4 @@
 import {
-  drawerWidth,
   drawerMiniWidth,
   transition,
   containerFluid,
@@ -20,9 +19,6 @@ const appStyle = (theme) => ({
     transitionProperty: "top, bottom, width",
     transitionDuration: ".2s, .2s, .35s",
     transitionTimingFunction: "linear, linear, ease",
-    [theme.breakpoints.up("md")]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
     overflow: "auto",
     position: "relative",
     float: "right",

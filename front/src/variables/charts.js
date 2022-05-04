@@ -453,7 +453,7 @@ const multipleBarsChart = {
     ],
   },
   options: {
-    seriesBarDistance: 10,
+    seriesBarDistance: 100,
     axisX: {
       showGrid: false,
     },
