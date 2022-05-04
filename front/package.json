@@ -5,10 +5,8 @@
   "dependencies": {
     "@material-ui/core": "4.11.4",
     "@material-ui/icons": "4.11.2",
-    "axios": "^0.26.1",
     "chartist": "0.10.1",
     "classnames": "2.3.1",
-    "keras": "^1.0.1",
     "match-sorter": "6.3.0",
     "moment": "2.29.1",
     "node-sass": "5.0.0",
