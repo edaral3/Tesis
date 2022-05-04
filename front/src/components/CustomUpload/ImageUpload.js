@@ -20,6 +20,8 @@ export default function ImageUpload(props) {
     let file = e.target.files[0];
     reader.onloadend = () => {
       setFile(file);
+      // eslint-disable-next-line
+      props.setImage(file);
       setImagePreviewUrl(reader.result);
     };
     if (file) {

@@ -27,6 +27,9 @@ import CardFooter from "components/Card/CardFooter.js";
 //graphic
 import { pieChart } from "variables/charts.js";
 
+//Axios
+const axios = require("axios");
+
 import styles1 from "assets/jss/material-dashboard-pro-react/views/chartsStyle.js";
 import styles2 from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 
@@ -92,15 +95,59 @@ export default function Dashboard() {
   };
   const [color, setColor] = React.useState("info");
   const [dataPie, setDataPie] = React.useState(first);
-  const changueColor = () => {
-    if (color === "danger") {
+  const [image, setImage] = React.useState();
+
+  const changueColor = async (data) => {
+    if (data[2] > data[0] && data[2] > data[1]) {
       setColor("info");
-    } else if (color === "info") {
-      setColor("warning");
-    } else {
+    } else if (data[0] > data[1] && data[0] > data[2]) {
       setColor("danger");
+    } else {
+      setColor("warning");
     }
+  };
+
+  const scanImage = async () => {
     setDataPie(first);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    let base64 = "";
+    reader.onload = async () => {
+      //aqui ya esta en base64
+      base64 = reader.result.split(",")[1];
+
+      // eslint-disable-next-line
+      let data = await axios.post(
+        "http://localhost:5000",
+        { base64: base64 },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        }
+      );
+
+      if (data.data) {
+        const list = JSON.parse(data.data);
+        changueColor(list);
+        const sum = list[0] + list[1] + list[2];
+        const newData = {
+          labels: [
+            ((100 * list[2]) / sum).toFixed(2) + "%",
+            ((100 * list[0]) / sum).toFixed(2) + "%",
+            ((100 * list[1]) / sum).toFixed(2) + "%",
+          ],
+          series: [
+            ((100 * list[2]) / sum).toFixed(2),
+            ((100 * list[0]) / sum).toFixed(2),
+            ((100 * list[1]) / sum).toFixed(2),
+          ],
+        };
+        setDataPie(newData);
+      }
+    };
   };
 
   const getName = () => {
@@ -192,6 +239,7 @@ export default function Dashboard() {
                     removeButtonProps={{
                       color: "rose",
                     }}
+                    setImage={setImage}
                   />
                 </GridItem>
               </GridContainer>
@@ -199,7 +247,7 @@ export default function Dashboard() {
             <CardBody>
               <GridContainer justify="center">
                 <GridItem xs={12} sm={12} md={12}>
-                  <Button fullWidth color="success" onClick={changueColor}>
+                  <Button fullWidth color="success" onClick={scanImage}>
                     Analizar imagen
                   </Button>
                 </GridItem>
