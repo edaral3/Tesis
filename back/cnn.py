@@ -101,5 +101,5 @@ def getPredictionCNN():
     print(result[0])
     return result[0]
 
-createCNN()
-trainCNN()
+#createCNN()
+#trainCNN()
